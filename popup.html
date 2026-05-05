@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #333333;
+      --btn-bg: #f0f0f0;
+      --btn-text: #333333;
+      --btn-hover: #e0e0e0;
+      --btn-border: #cccccc;
+      --accent: #0060df;
+      --footer-text: #666666;
+      --border-color: #eaeaea;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #1c1b22;
+        --text-color: #fbfbfe;
+        --btn-bg: #2b2a33;
+        --btn-text: #fbfbfe;
+        --btn-hover: #52525e;
+        --btn-border: #4a4a4f;
+        --accent: #00ddff;
+        --footer-text: #999999;
+        --border-color: #38383d;
+      }
+    }
+
+    body {
+      width: 200px;
+      padding: 15px;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+    }
+    h3 {
+      margin: 0 0 15px 0;
+      font-size: 16px;
+      text-align: center;
+      font-weight: 600;
+    }
+    button {
+      width: 100%;
+      padding: 8px 12px;
+      margin: 5px 0;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: 1px solid var(--btn-border);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background-color 0.15s ease;
+    }
+    button:hover {
+      background: var(--btn-hover);
+    }
+
+    .footer {
+      margin-top: 15px;
+      font-size: 11px;
+      color: var(--footer-text);
+      border-top: 1px solid var(--border-color);
+      padding-top: 10px;
+      text-align: center;
+    }
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .credit {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h3>PermaEdit</h3>
+
+  <button id="infoBtn">How to use (F12)</button>
+  <button id="saveBtn">Save F12 Changes</button>
+  <button id="resetBtn">Reset to Default</button>
+
+  <div class="footer">
+    <div>Version: <span id="versionDisplay">Loading...</span></div>
+    <div style="margin-top: 6px;">Made by <span class="credit">Nexoniarz</span></div>
+    <div style="margin-top: 2px;"><a href="https://github.com/Nexoniarz" target="_blank">GitHub</a></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
