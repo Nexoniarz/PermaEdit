@@ -8,6 +8,14 @@
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "permaedit@nexoniarz.github.io",
+      "data_collection_permissions": {
+        "allow": false
+      }
+    }
+  },
   "permissions": [
     "activeTab",
     "storage",
