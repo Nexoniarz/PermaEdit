@@ -2,8 +2,11 @@ const siteKey = "permaEdit_" + window.location.hostname + window.location.pathna
 
 browser.storage.local.get([siteKey]).then((result) => {
     if (result[siteKey]) {
-        document.body.innerHTML = result[siteKey];
-        console.log("[PermaEdit] Loaded saved modifications.");
+        const parser = new DOMParser();
+        const newDoc = parser.parseFromString(result[siteKey], 'text/html');
+        document.documentElement.replaceWith(newDoc.documentElement);
+
+        console.log("[PermaEdit] Loaded saved modifications safely.");
     }
 });
 
@@ -14,7 +17,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 
     if (request.action === "saveState") {
-        let fakeHTML = document.body.innerHTML;
+        let fakeHTML = document.documentElement.outerHTML;
         let obj = {};
         obj[siteKey] = fakeHTML;
 
