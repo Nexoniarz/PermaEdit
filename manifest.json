@@ -10,7 +10,10 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "permaedit@nexoniarz.github.io",
+      "id": "permaedit@nexoniarz.org",
+      "strict_min_version": "100.0"
+    },
+    "gecko_android": {
       "data_collection_permissions": {
         "allow": false
       }
