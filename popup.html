@@ -4,45 +4,116 @@
   <meta charset="utf-8">
   <style>
     :root {
-      --bg-color: #ffffff;
+      --base-bg: #f4f4f9;
+      --dot-color: rgba(0, 96, 223, 0.15);
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.5);
+
       --text-color: #333333;
-      --btn-bg: #f0f0f0;
+      --btn-bg: rgba(255, 255, 255, 0.8);
       --btn-text: #333333;
-      --btn-hover: #e0e0e0;
-      --btn-border: #cccccc;
+      --btn-hover: rgba(255, 255, 255, 1);
+      --btn-border: rgba(0, 0, 0, 0.1);
       --accent: #0060df;
-      --footer-text: #666666;
-      --border-color: #eaeaea;
+      --footer-text: #555555;
+
+      --input-bg: rgba(255, 255, 255, 0.9);
+      --item-bg: rgba(255, 255, 255, 0.6);
+      --action-btn-bg: rgba(255, 255, 255, 0.9);
+      --modal-overlay: rgba(0, 0, 0, 0.4);
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg-color: #1c1b22;
+        --base-bg: #121118;
+        --dot-color: rgba(0, 221, 255, 0.15);
+        --glass-bg: rgba(28, 27, 34, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.08);
+
         --text-color: #fbfbfe;
-        --btn-bg: #2b2a33;
+        --btn-bg: rgba(43, 42, 51, 0.8);
         --btn-text: #fbfbfe;
-        --btn-hover: #52525e;
-        --btn-border: #4a4a4f;
+        --btn-hover: rgba(82, 82, 94, 0.9);
+        --btn-border: rgba(255, 255, 255, 0.1);
         --accent: #00ddff;
-        --footer-text: #999999;
-        --border-color: #38383d;
+        --footer-text: #aaaaaa;
+
+        --input-bg: rgba(28, 27, 34, 0.9);
+        --item-bg: rgba(0, 0, 0, 0.4);
+        --action-btn-bg: rgba(43, 42, 51, 0.9);
+        --modal-overlay: rgba(0, 0, 0, 0.7);
       }
     }
 
     body {
-      width: 200px;
-      padding: 15px;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
+      width: 260px;
       margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-color);
+      position: relative;
+      overflow: hidden; /* For background dots */
     }
+
+    /* Animated Dots Background */
+    .bg-bubbles {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      margin: 0; padding: 0;
+      background: var(--base-bg);
+      list-style: none;
+    }
+    .bg-bubbles li {
+      position: absolute;
+      display: block;
+      border-radius: 50%;
+      background: var(--dot-color);
+      bottom: -40px;
+      animation: floatUp 12s linear infinite;
+    }
+    .bg-bubbles li:nth-child(1) { left: 10%; width: 40px; height: 40px; animation-delay: 0s; }
+    .bg-bubbles li:nth-child(2) { left: 30%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 15s; }
+    .bg-bubbles li:nth-child(3) { left: 70%; width: 35px; height: 35px; animation-delay: 4s; }
+    .bg-bubbles li:nth-child(4) { left: 50%; width: 25px; height: 25px; animation-delay: 1s; animation-duration: 10s; }
+    .bg-bubbles li:nth-child(5) { left: 85%; width: 45px; height: 45px; animation-delay: 3s; animation-duration: 14s; }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8); opacity: 1; }
+      100% { transform: translateY(-400px) scale(1.2); opacity: 0; }
+    }
+
+    /* Frosted Glass Container */
+    .glass-panel {
+      padding: 15px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .header-icon {
+      width: 32px;
+      height: 32px;
+    }
+
     h3 {
-      margin: 0 0 15px 0;
+      margin: 0;
       font-size: 16px;
       text-align: center;
       font-weight: 600;
     }
+
     button {
       width: 100%;
       padding: 8px 12px;
@@ -53,47 +124,227 @@
       border-radius: 4px;
       cursor: pointer;
       font-size: 13px;
-      transition: background-color 0.15s ease;
+      transition: all 0.15s ease;
+      backdrop-filter: blur(4px);
     }
+
     button:hover {
       background: var(--btn-hover);
+    }
+
+    #manageSection {
+      display: none;
+      margin-top: 10px;
+      border-top: 1px solid var(--btn-border);
+      padding-top: 10px;
+    }
+
+    #searchInput {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 6px;
+      margin-bottom: 8px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      border: 1px solid var(--btn-border);
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    #savedList {
+      max-height: 160px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .saved-item {
+      background: var(--item-bg);
+      border: 1px solid var(--btn-border);
+      border-radius: 4px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .item-title {
+      font-size: 11px;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .item-url {
+      font-size: 9px;
+      opacity: 0.7;
+      word-break: break-all;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .action-btn {
+      flex: 1;
+      margin: 0;
+      padding: 4px;
+      font-size: 10px;
+      background: var(--action-btn-bg);
     }
 
     .footer {
       margin-top: 15px;
       font-size: 11px;
       color: var(--footer-text);
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid var(--btn-border);
       padding-top: 10px;
       text-align: center;
     }
+
     .footer a {
       color: var(--accent);
       text-decoration: none;
     }
+
     .footer a:hover {
       text-decoration: underline;
     }
+
     .credit {
       font-weight: 600;
+    }
+
+    /* Modals */
+    .modal-overlay {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--modal-overlay);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+
+    .modal-content {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      padding: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .modal-text {
+      font-size: 12px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .modal-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 6px;
+      margin-bottom: 10px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      border: 1px solid var(--btn-border);
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      margin: 0;
+    }
+
+    .modal-btn.danger {
+      background: rgba(215, 0, 34, 0.9);
+      color: white;
+      border-color: rgba(165, 0, 22, 0.8);
+    }
+
+    .modal-btn.danger:hover {
+      background: rgba(165, 0, 22, 1);
     }
   </style>
 </head>
 <body>
-  <h3>PermaEdit</h3>
+  <ul class="bg-bubbles">
+    <li></li><li></li><li></li><li></li><li></li>
+  </ul>
 
-  <button id="infoBtn">How to use (F12)</button>
-  <button id="saveBtn">Save F12 Changes</button>
-  <button id="resetBtn">Reset to Default</button>
-
- <div class="footer">
-    <div>Version <span id="versionDisplay">1.0</span></div>
-    <div style="margin-top: 6px;">Made by <span class="credit">Nexoniarz</span></div>
-    <div style="margin-top: 4px;">
-      <a href="https://github.com/Nexoniarz/PermaEdit" target="_blank">Source Code</a> 
-      <a href="https://github.com/Nexoniarz" target="_blank">GitHub</a>
+  <div class="glass-panel">
+    <div class="header-container">
+      <img src="icons/icon.svg" alt="PermaEdit Icon" class="header-icon">
+      <h3>PermaEdit</h3>
     </div>
-    <div style="margin-top: 4px; font-size: 10px; opacity: 0.7;">Licensed under MIT</div>
+
+    <button id="infoBtn">How to use</button>
+    <button id="saveBtn">Save Page State</button>
+    <button id="resetBtn">Revert to Original</button>
+    <button id="manageBtn">Manage Saved States</button>
+
+    <div id="manageSection">
+      <input type="text" id="searchInput" placeholder="Search pages...">
+      <div id="savedList"></div>
+    </div>
+
+    <div class="footer">
+      <div>Version <span id="versionDisplay">1.1</span></div>
+      <div style="margin-top: 6px;">Made by <span class="credit">Nexoniarz</span></div>
+      <div style="margin-top: 4px;">
+        <a href="https://github.com/Nexoniarz/PermaEdit" target="_blank">Source Code</a>
+        <a href="https://github.com/Nexoniarz" target="_blank">GitHub</a>
+      </div>
+      <div style="margin-top: 4px; font-size: 10px; opacity: 0.7;">Licensed under MIT</div>
+    </div>
+  </div>
+
+  <div id="infoModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-text" style="text-align: left; line-height: 1.5; font-size: 11px;">
+        <b>PermaEdit Instructions:</b><br><br>
+        1. Open Developer Console (F12 or Ctrl+Shift+I).<br>
+        2. Make your desired visual edits to the website.<br>
+        3. Click <b>Save Page State</b> to freeze the changes permanently.
+      </div>
+      <div class="modal-actions">
+        <button id="infoCloseBtn" class="modal-btn">Understood</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="renameModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-text">Enter a custom name:</div>
+      <input type="text" id="renameInput" class="modal-input">
+      <div class="modal-actions">
+        <button id="renameCancelBtn" class="modal-btn">Cancel</button>
+        <button id="renameSaveBtn" class="modal-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-text">Are you sure you want to delete this saved state?</div>
+      <div class="modal-actions">
+        <button id="deleteCancelBtn" class="modal-btn">No</button>
+        <button id="deleteConfirmBtn" class="modal-btn danger">Yes</button>
+      </div>
+    </div>
   </div>
 
   <script src="popup.js"></script>

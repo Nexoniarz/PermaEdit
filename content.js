@@ -10,11 +10,47 @@ browser.storage.local.get([siteKey]).then((result) => {
     }
 });
 
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+function showCustomToast(message, reloadAfter = false) {
+    const toast = document.createElement('div');
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.right = '20px';
+    toast.style.background = 'rgba(28, 27, 34, 0.9)';
+    toast.style.backdropFilter = 'blur(10px)';
+    toast.style.color = '#00ddff';
+    toast.style.padding = '12px 20px';
+    toast.style.borderRadius = '8px';
+    toast.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+    toast.style.fontSize = '14px';
+    toast.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)';
+    toast.style.zIndex = '2147483647';
+    toast.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+    toast.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    toast.style.transform = 'translateY(20px)';
+    toast.style.opacity = '0';
+    toast.style.pointerEvents = 'none';
 
-    if (request.action === "showInstructions") {
-        alert("PermaEdit:\n\n1. Press F12 (or Ctrl+Shift+I) to open Developer Console.\n2. Edit the HTML/Text exactly how you want it.\n3. Click 'Save F12 Changes' in the extension to make it permanent.");
-    }
+    toast.innerHTML = `<strong style="color: #fff;">PermaEdit:</strong> ${message}`;
+
+    document.body.appendChild(toast);
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+        toast.style.transform = 'translateY(0)';
+        toast.style.opacity = '1';
+    });
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            toast.remove();
+            if (reloadAfter) window.location.reload();
+        }, 400);
+    }, 3000);
+}
+
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     if (request.action === "saveState") {
         let fakeHTML = document.documentElement.outerHTML;
@@ -22,14 +58,13 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         obj[siteKey] = fakeHTML;
 
         browser.storage.local.set(obj).then(() => {
-            alert("PermaEdit: F12 changes SAVED permanently.");
+            showCustomToast("Page state SAVED permanently.");
         });
     }
 
     if (request.action === "resetState") {
         browser.storage.local.remove(siteKey).then(() => {
-            alert("PermaEdit: Reset to default. Reloading page...");
-            window.location.reload();
+            showCustomToast("Reverted to default. Reloading...", true);
         });
     }
 });
