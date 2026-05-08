@@ -1,3 +1,4 @@
+![PermaEdit Icon](icons/icon.svg)
 # PermaEdit
 
 Make permanent visual edits to any webpage.
