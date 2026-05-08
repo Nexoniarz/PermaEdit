@@ -11,6 +11,9 @@ PermaEdit is a lightweight developer tool (WebExtension) designed to freeze and 
 * **Native Theme Integration:** Clean and minimal user interface that automatically adapts to your system's Light or Dark mode.
 * **One-Click Reset:** Easily wipe cached modifications and restore the original webpage back to default instantly.
 
+## Download
+* [Firefox] - https://addons.mozilla.org/en/firefox/addon/permaedit/
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
