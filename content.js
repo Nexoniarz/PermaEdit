@@ -5,7 +5,6 @@ browser.storage.local.get([siteKey]).then((result) => {
         const parser = new DOMParser();
         const newDoc = parser.parseFromString(result[siteKey], 'text/html');
         document.documentElement.replaceWith(newDoc.documentElement);
-
         console.log("[PermaEdit] Loaded saved modifications safely.");
     }
 });
@@ -30,11 +29,15 @@ function showCustomToast(message, reloadAfter = false) {
     toast.style.opacity = '0';
     toast.style.pointerEvents = 'none';
 
-    toast.innerHTML = `<strong style="color: #fff;">PermaEdit:</strong> ${message}`;
+    const strongTag = document.createElement('strong');
+    strongTag.style.color = '#fff';
+    strongTag.textContent = 'PermaEdit: ';
+
+    toast.appendChild(strongTag);
+    toast.appendChild(document.createTextNode(message));
 
     document.body.appendChild(toast);
 
-    // Trigger animation
     requestAnimationFrame(() => {
         toast.style.transform = 'translateY(0)';
         toast.style.opacity = '1';
@@ -51,7 +54,6 @@ function showCustomToast(message, reloadAfter = false) {
 }
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-
     if (request.action === "saveState") {
         let fakeHTML = document.documentElement.outerHTML;
         let obj = {};
